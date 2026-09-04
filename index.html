@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>avigail's dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#10024;</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // The Play CDN does not resolve the `<alpha-value>` placeholder inside a
+      // plain string, so every custom colour silently produced no rule at all.
+      // The function form is the supported way to combine CSS variables with
+      // Tailwind's /opacity modifiers.
+      const v = (name) => ({ opacityValue }) =>
+        opacityValue === undefined
+          ? `rgb(var(${name}))`
+          : `rgb(var(${name}) / ${opacityValue})`;
+
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Advercase', '"Playfair Display"', 'Georgia', 'serif'],
+              serif: ['Advercase', '"Playfair Display"', 'Georgia', 'serif'],
+              sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              // Everything reads from CSS variables so the palette picker can
+              // repaint the whole app at once. Channels (not hex) so that
+              // Tailwind's /opacity modifiers keep working.
+              line: v('--line'),
+              ink: {
+                DEFAULT: '#231A1E',
+                soft: '#6E6167',
+                faint: '#A99BA2',
+              },
+              accent: {
+                DEFAULT: v('--accent'),
+                hover: v('--accent-hover'),
+                soft: v('--accent-soft'),
+                mid: v('--accent-mid'),
+                deep: v('--accent-deep'),
+                ink: v('--accent-ink'),
+              },
+              // Progress is always green regardless of palette — filling a bar
+              // should read as growth, not as more of the surrounding colour.
+              grow: {
+                DEFAULT: '#4E9C6B',
+                soft: '#E8F3EC',
+                deep: '#2F6B44',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Advercase by Indieground. Licensed for use in this app, NOT for
+         redistribution — assets/fonts is gitignored so a public repo never
+         ships the font files. */
+      @font-face {
+        font-family: 'Advercase';
+        src: url('./assets/Advercase-Font-Regular-CGgfGYBx.ttf') format('truetype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Advercase';
+        src: url('./assets/Advercase-Font-Bold-C3bFNBiA.ttf') format('truetype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Advercase';
+        src: url('./assets/Advercase-Font-Italic-BrkhFnLV.ttf') format('truetype');
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Advercase';
+        src: url('./assets/Advercase-Font-BoldItalic-CM_K6We-.ttf') format('truetype');
+        font-weight: 700;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      :root {
+        /* Overwritten by the palette picker; these are the "baby pink" values. */
+        --accent: 246 165 200;
+        --accent-hover: 242 144 188;
+        --accent-soft: 254 243 248;
+        --accent-mid: 251 208 226;
+        --accent-deep: 201 69 127;
+        --accent-ink: 255 255 255;
+        --block-bg: 246 165 200;
+        --block-border: 238 141 182;
+        --block-text: 255 255 255;
+        --line: 240 226 233;
+      }
+
+      body {
+        font-family: 'Advercase', 'Playfair Display', Georgia, serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        color: #231a1e;
+        overflow: hidden;
+      }
+
+      /* Long-form reading text. Advercase is a display face — beautiful for
+         headings, exhausting for a paragraph, where it reads as permanently
+         bold. Anything longer than a line or two goes in the sans instead. */
+      .prose {
+        font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.005em;
+      }
+
+      /* Small metadata labels stay in the sans — Advercase at 9px turns to mush. */
+      .meta {
+        font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+        font-feature-settings: 'tnum';
+      }
+
+      input,
+      textarea,
+      select,
+      button {
+        font-family: inherit;
+      }
+
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #f0dae5; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: #e4c1d3; }
+
+      @keyframes confetti-fall {
+        0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+        10%  { opacity: 1; }
+        100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+      }
+      .animate-confetti {
+        animation-name: confetti-fall;
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes pop-in {
+        0%   { transform: scale(0.96); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      .animate-pop-in { animation: pop-in 180ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+      @keyframes slide-up {
+        0%   { transform: translateY(14px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+      }
+      .animate-slide-up { animation: slide-up 220ms ease-out both; }
+
+      @keyframes soft-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgb(var(--accent) / 0.8); }
+        50%      { box-shadow: 0 0 0 6px rgb(var(--accent) / 0); }
+      }
+      .animate-soft-pulse { animation: soft-pulse 1.9s ease-out infinite; }
+
+      /* Editor typography. Without these every block renders at the same size
+         and a heading is indistinguishable from a paragraph, which is exactly
+         what made the templates unreadable. */
+      .mh-prose { font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; }
+
+      .mh-prose h2 {
+        font-family: 'Advercase', Georgia, serif;
+        font-size: 1.5em;
+        line-height: 1.2;
+        color: #231a1e;
+        margin: 1.4em 0 0.4em;
+      }
+      .mh-prose h2:first-child { margin-top: 0; }
+
+      .mh-prose h3 {
+        font-family: 'Advercase', Georgia, serif;
+        font-size: 1.18em;
+        line-height: 1.25;
+        color: #231a1e;
+        margin: 1.1em 0 0.3em;
+      }
+
+      .mh-prose p { margin: 0 0 0.7em; }
+      .mh-prose strong { font-weight: 700; color: #231a1e; }
+      .mh-prose em { font-style: italic; }
+
+      .mh-prose blockquote {
+        border-left: 3px solid rgb(var(--accent));
+        padding-left: 0.9em;
+        margin: 0.8em 0;
+        color: #6e6167;
+        font-style: italic;
+      }
+
+      .mh-prose ul, .mh-prose ol { padding-left: 1.3em; margin: 0.5em 0 0.8em; }
+      .mh-prose ul { list-style: disc; }
+      .mh-prose ol { list-style: decimal; }
+      .mh-prose li { margin: 0.2em 0; }
+
+      .mh-prose ul[data-type='taskList'] { list-style: none; padding-left: 0.2em; }
+      .mh-prose ul[data-type='taskList'] li { display: flex; gap: 0.55em; align-items: flex-start; }
+      .mh-prose ul[data-type='taskList'] li > label { margin-top: 0.28em; }
+      .mh-prose ul[data-type='taskList'] input[type='checkbox'] {
+        accent-color: rgb(var(--accent));
+        width: 0.95em;
+        height: 0.95em;
+        cursor: pointer;
+      }
+      /* A ticked item should read as done without having to look at the box. */
+      .mh-prose ul[data-type='taskList'] li[data-checked='true'] > div {
+        text-decoration: line-through;
+        color: #a99ba2;
+      }
+
+      .mh-prose a { color: rgb(var(--accent-deep)); text-decoration: underline; }
+      .mh-prose img { border-radius: 12px; margin: 0.8em 0; max-width: 100%; height: auto; }
+      .mh-prose hr { border: none; border-top: 1px solid rgb(var(--line)); margin: 1.2em 0; }
+
+      .mh-prose p.is-editor-empty:first-child::before {
+        content: attr(data-placeholder);
+        color: #a99ba2;
+        float: left;
+        height: 0;
+        pointer-events: none;
+      }
+
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.4",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "@google/genai": "https://esm.sh/@google/genai@^1.39.0",
+        "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+        "date-fns": "https://esm.sh/date-fns@^4.1.0"
+      }
+    }
+    </script>
+    <script type="module" crossorigin src="./assets/index-BLm-wPBb.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
