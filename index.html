@@ -171,6 +171,42 @@
       }
       .animate-soft-pulse { animation: soft-pulse 1.9s ease-out infinite; }
 
+      /* Google Calendar descriptions. They arrive as third-party HTML with no
+         styling of their own, so give the few tags we allow through sane
+         spacing — otherwise a booking confirmation renders as one dense wall. */
+      .mh-description p { margin: 0 0 0.55em; }
+      .mh-description p:last-child { margin-bottom: 0; }
+      .mh-description ul,
+      .mh-description ol { margin: 0.4em 0 0.55em; padding-left: 1.25em; }
+      .mh-description ul { list-style: disc; }
+      .mh-description ol { list-style: decimal; }
+      .mh-description li { margin: 0.15em 0; }
+      .mh-description a {
+        color: rgb(var(--accent-deep));
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        overflow-wrap: anywhere;
+      }
+      .mh-description b, .mh-description strong { font-weight: 700; }
+      .mh-description h1, .mh-description h2,
+      .mh-description h3, .mh-description h4 {
+        font-family: 'Advercase', Georgia, serif;
+        font-size: 1.15em;
+        margin: 0.6em 0 0.3em;
+      }
+      .mh-description blockquote {
+        margin: 0.4em 0;
+        padding-left: 0.7em;
+        border-left: 2px solid rgb(var(--accent-mid));
+        color: rgb(var(--ink-soft, 120 106 112));
+      }
+      .mh-description pre,
+      .mh-description code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.92em;
+      }
+      .mh-description pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
       /* Editor typography. Without these every block renders at the same size
          and a heading is indistinguishable from a paragraph, which is exactly
          what made the templates unreadable. */
@@ -253,7 +289,7 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="./assets/index-BLm-wPBb.js"></script>
+    <script type="module" crossorigin src="./assets/index-BbdqB_HJ.js"></script>
   </head>
   <body>
     <div id="root"></div>
