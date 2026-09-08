@@ -171,6 +171,12 @@
       }
       .animate-soft-pulse { animation: soft-pulse 1.9s ease-out infinite; }
 
+      /* No hover on a touch screen, so the block's done box would never appear
+         and could never be tapped. Show it permanently there instead. */
+      @media (hover: none) {
+        .mh-done-box { opacity: 1 !important; }
+      }
+
       /* Google Calendar descriptions. They arrive as third-party HTML with no
          styling of their own, so give the few tags we allow through sane
          spacing — otherwise a booking confirmation renders as one dense wall. */
@@ -289,7 +295,7 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="./assets/index-C-cyBwcK.js"></script>
+    <script type="module" crossorigin src="./assets/index-Bv9oLdio.js"></script>
   </head>
   <body>
     <div id="root"></div>
