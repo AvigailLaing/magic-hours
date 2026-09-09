@@ -171,10 +171,12 @@
       }
       .animate-soft-pulse { animation: soft-pulse 1.9s ease-out infinite; }
 
-      /* No hover on a touch screen, so the block's done box would never appear
-         and could never be tapped. Show it permanently there instead. */
+      /* No hover on a touch screen, so the tick and X would never appear and
+         could never be tapped. Showing them on every block instead is worse —
+         two 13px boxes cover the title of a narrow block on a phone. Reveal
+         them on the block she has actually tapped. */
       @media (hover: none) {
-        .mh-done-box { opacity: 1 !important; }
+        [data-event-id][data-selected='true'] .mh-done-box { opacity: 1 !important; }
       }
 
       /* Google Calendar descriptions. They arrive as third-party HTML with no
@@ -295,7 +297,7 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="./assets/index-CKiDypxO.js"></script>
+    <script type="module" crossorigin src="./assets/index-DHf_5MHA.js"></script>
   </head>
   <body>
     <div id="root"></div>
